@@ -1,4 +1,4 @@
-# Usar imagem oficial do OpenJDK 17
+# Usar imagem oficial do OpenJDK 21
 FROM openjdk:21-jdk-slim
 
 # Definir diretório de trabalho

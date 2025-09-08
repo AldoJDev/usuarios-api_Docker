@@ -5,6 +5,8 @@ import com.ctc.usuario_api.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UsuarioService {
 
@@ -14,6 +16,12 @@ public class UsuarioService {
     public boolean existeUsuario(String login){
 
         return repository.existsByLogin(login);
+    }
+
+
+    public List<Usuario> getAllUsers(){
+
+        return repository.findAll();
     }
 
     public Usuario salvarUsuario(Usuario usuario){
