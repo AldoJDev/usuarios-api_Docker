@@ -1,0 +1,49 @@
+services:
+  # Banco de dados SQL Server
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: sqlserver-container
+    environment:
+      ACCEPT_EULA: "Y"
+      # ATENÇÃO: A senha do SA PRECISA ser forte para o container iniciar.
+      SA_PASSWORD: "SuaSenhaF0rte!23"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - usuario-network
+    healthcheck:
+      # Usando a senha forte que definimos acima
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'SuaSenhaF0rte!23' -Q 'SELECT 1' || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 45s
+
+  # Aplicação Spring Boot
+  usuario-api:
+    build: .
+    container_name: usuario-api-container
+    # ADICIONE ESTA LINHA PARA RESOLVER O PROBLEMA DE PERMISSÃO
+    user: root
+    environment:
+      # A aplicação DEVE se conectar com o usuário 'sa' e a senha forte
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://sqlserver:1433;databaseName=usuariosdb;encrypt=false;trustServerCertificate=true
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: "SuaSenhaF0rte!23"
+    ports:
+      - "8080:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - usuario-network
+    restart: unless-stopped
+
+volumes:
+  sqlserver-data:
+
+networks:
+  usuario-network:
+    driver: bridge
