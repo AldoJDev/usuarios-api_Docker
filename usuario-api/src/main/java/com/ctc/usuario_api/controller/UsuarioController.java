@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/usuarios")
 @CrossOrigin(origins = "*")
@@ -38,7 +41,7 @@ public class UsuarioController {
             if (e.getMessage().equals("Usuário já existe")) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Usuário já existe");
             }
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Usuario ja existe");
         }
     }
 
@@ -56,6 +59,20 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno");
         }
     }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Usuario>> getAllUsers() {
+        try {
+            List<Usuario> usuarios = usuarioService.getAllUsers();
+            return ResponseEntity.ok(usuarios);
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    Collections.emptyList(),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
 
 
     @GetMapping("/check/{login}")

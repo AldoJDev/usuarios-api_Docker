@@ -18,7 +18,6 @@ RUN ./mvnw dependency:go-offline -B
 # Copiar código fonte
 COPY src ./src
 
-# Compilar a aplicação
 RUN ./mvnw clean package -DskipTests
 
 # Expor a porta 8080

@@ -3,7 +3,7 @@ services:
     image: mysql:8.0
     container_name: mysql-container
     environment:
-      MYSQL_ROOT_PASSWORD: "SuaSenhaF0rte!23"
+      MYSQL_ROOT_PASSWORD: "MinhaSenhaF0rte!23"
       MYSQL_DATABASE: BD23121
       MYSQL_USER: BD23121
       MYSQL_PASSWORD: BD23121
@@ -24,9 +24,14 @@ services:
     build: .
     container_name: usuario-api-container
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/BD23121?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: BD23121
-      SPRING_DATASOURCE_PASSWORD: BD23121
+      SPRING_PROFILES_ACTIVE: "docker"
+      SPRING_DATASOURCE_URL: "jdbc:mysql://mysql:3306/BD23121?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+      SPRING_DATASOURCE_USERNAME: "BD23121"
+      SPRING_DATASOURCE_PASSWORD: "BD23121"
+      SPRING_DATASOURCE_DRIVER-CLASS-NAME: "com.mysql.cj.jdbc.Driver"
+      SPRING_JPA_HIBERNATE_DDL-AUTO: "update"
+      SPRING_JPA_SHOW-SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.MySQLDialect"
     ports:
       - "8080:8080"
     networks:
